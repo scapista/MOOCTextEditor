@@ -39,7 +39,6 @@ public abstract class Document {
 		while (m.find()) {
 			tokens.add(m.group());
 		}
-		
 		return tokens;
 	}
 	
@@ -74,6 +73,7 @@ public abstract class Document {
             cnter++;
         }
         if(word.endsWith("y")) syllables++;
+        if(word.endsWith("e") && "aeiouAEIOU".indexOf(word.charAt(word.length()-2)) > -1) syllables++;
 	    return (syllables==0 && !word.isEmpty()) ? 1 : syllables;
 	}
 	
@@ -150,11 +150,6 @@ public abstract class Document {
             numSyllables += countSyllables(str);
 			//System.out.println(str + numSyllables);
 		}
-
-		//System.out.println(numSentences);
-		//System.out.println(numWords);
-        //System.out.println(numSyllables);
-
 
 		return FLESCHMAX - WORDS_PER_SENTENCE * (numWords/numSentences)
 				- SYLLABLES_PER_WORD * (numSyllables/numWords);
