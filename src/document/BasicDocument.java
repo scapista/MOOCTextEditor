@@ -57,10 +57,11 @@ public class BasicDocument extends Document
 	public int getNumSentences()
 	{
 		int cnt = 0;
-		for(String str: getText().split("[.!?]+")){
+		for(String str: getTokens("[.!?]+")){
+			System.err.println(str);
 			cnt++;
 		}
-        return cnt;
+        return (cnt==0 && !getText().isEmpty()) ? cnt+1 : cnt;
 	}
 	
 	/**
@@ -81,8 +82,9 @@ public class BasicDocument extends Document
 	public int getNumSyllables()
 	{
 	    int syllables = 0;
-		for (String str: getText().split("[ -]+|[,.?!]+")){
+		for (String str: getTokens("[A-Za-z]+")){
 			syllables += countSyllables(str);
+			System.err.println(str + " " + syllables);
 		}
         return syllables;
 	}

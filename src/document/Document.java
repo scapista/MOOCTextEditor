@@ -64,16 +64,19 @@ public abstract class Document {
 	 */
 	protected int countSyllables(String word)
 	{
-		int cnter = 0, lastCnter = -1, syllables = 0;
+		int syllables = 0;
+        boolean lastChar = true;
         for (char ch : word.toCharArray()){
-            if ( "aeiouAEIOU".indexOf(ch) > -1 && lastCnter+1 != cnter) {
+            if ( "aeiouAEIOU".indexOf(ch) > -1 && lastChar) {
                 syllables++;
-                lastCnter = cnter;
+                lastChar = false;
             }
-            cnter++;
+            else if (lastChar) continue;
+            else lastChar = true;
         }
         if(word.endsWith("y")) syllables++;
-        if(word.endsWith("e") && "aeiouAEIOU".indexOf(word.charAt(word.length()-2)) > -1) syllables++;
+        if(word.endsWith("e")) syllables--;
+		System.out.println("here");
 	    return (syllables==0 && !word.isEmpty()) ? 1 : syllables;
 	}
 	
@@ -94,26 +97,26 @@ public abstract class Document {
 		int wordsFound = doc.getNumWords();
 		int sentFound = doc.getNumSentences();
 		if (syllFound != syllables) {
-			System.out.println("\nIncorrect number of syllables.  Found " + syllFound 
+			System.err.println("\nIncorrect number of syllables.  Found " + syllFound
 					+ ", expected " + syllables);
 			passed = false;
 		}
 		if (wordsFound != words) {
-			System.out.println("\nIncorrect number of words.  Found " + wordsFound 
+			System.err.println("\nIncorrect number of words.  Found " + wordsFound
 					+ ", expected " + words);
 			passed = false;
 		}
 		if (sentFound != sentences) {
-			System.out.println("\nIncorrect number of sentences.  Found " + sentFound 
+			System.err.println("\nIncorrect number of sentences.  Found " + sentFound
 					+ ", expected " + sentences);
 			passed = false;
 		}
 		
 		if (passed) {
-			System.out.println("passed.\n");
+			System.err.println("passed.\n");
 		}
 		else {
-			System.out.println("FAILED.\n");
+			System.err.println("FAILED.\n");
 		}
 		return passed;
 	}
