@@ -65,18 +65,24 @@ public abstract class Document {
 	protected int countSyllables(String word)
 	{
 		int syllables = 0;
-        boolean lastChar = true;
+        char lastChar = '0';
+		boolean isVoul = false;
         for (char ch : word.toCharArray()){
-            if ( "aeiouAEIOU".indexOf(ch) > -1 && lastChar) {
+            if ( "yaeiouAEIOUY".indexOf(ch) > -1 && lastChar != ch && !isVoul) {
                 syllables++;
-                lastChar = false;
+                lastChar = ch;
+				isVoul = true;
             }
-            else if (lastChar) continue;
-            else lastChar = true;
+			else if ("yaeiouAEIOUY".indexOf(ch) > -1){
+				isVoul = true;
+			}
+			else {
+				lastChar = ch;
+				isVoul = false;
+			}
         }
-        if(word.endsWith("y")) syllables++;
-        if(word.endsWith("e")) syllables--;
-		System.out.println("here");
+        //if(word.endsWith("y")) syllables++;
+        if(word.endsWith("e") && !("aeiouAEIOU".indexOf(word.charAt(word.length() -2 )) > -1)) syllables--;
 	    return (syllables==0 && !word.isEmpty()) ? 1 : syllables;
 	}
 	
@@ -91,32 +97,32 @@ public abstract class Document {
 	public static boolean testCase(Document doc, int syllables, int words, int sentences)
 	{
 		System.out.println("Testing text: ");
-		System.out.print(doc.getText() + "\n....");
+		System.out.print(doc.getText() + "\n....\n");
 		boolean passed = true;
 		int syllFound = doc.getNumSyllables();
 		int wordsFound = doc.getNumWords();
 		int sentFound = doc.getNumSentences();
 		if (syllFound != syllables) {
-			System.err.println("\nIncorrect number of syllables.  Found " + syllFound
+			System.out.println("\nIncorrect number of syllables.  Found " + syllFound
 					+ ", expected " + syllables);
 			passed = false;
 		}
 		if (wordsFound != words) {
-			System.err.println("\nIncorrect number of words.  Found " + wordsFound
+			System.out.println("\nIncorrect number of words.  Found " + wordsFound
 					+ ", expected " + words);
 			passed = false;
 		}
 		if (sentFound != sentences) {
-			System.err.println("\nIncorrect number of sentences.  Found " + sentFound
+			System.out.println("\nIncorrect number of sentences.  Found " + sentFound
 					+ ", expected " + sentences);
 			passed = false;
 		}
 		
 		if (passed) {
-			System.err.println("passed.\n");
+			System.out.println("passed.\n");
 		}
 		else {
-			System.err.println("FAILED.\n");
+			System.out.println("FAILED.\n");
 		}
 		return passed;
 	}
@@ -138,21 +144,14 @@ public abstract class Document {
 	}
 	
 	/** return the Flesch readability score of this document */
-	public double getFleschScore()
-	{
-
+	public double getFleschScore() {
 		final float FLESCHMAX = 206.835F;
 		final float WORDS_PER_SENTENCE = 1.015F;
 		final float SYLLABLES_PER_WORD = 84.6F;
 
-		float numWords = 0.0F, numSentences = 0.0F, numSyllables = 0.0F;
-
-		for(String str: text.split("[ -]+|[.]")){
-			if ( str.isEmpty()) numSentences++;
-			else numWords++;
-            numSyllables += countSyllables(str);
-			//System.out.println(str + numSyllables);
-		}
+		float 	numWords = getNumWords(),
+				numSentences = getNumSentences(),
+				numSyllables = getNumSyllables();
 
 		return FLESCHMAX - WORDS_PER_SENTENCE * (numWords/numSentences)
 				- SYLLABLES_PER_WORD * (numSyllables/numWords);

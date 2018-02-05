@@ -1,6 +1,8 @@
 package document;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** 
  * A naive implementation of the Document abstract class. 
@@ -32,15 +34,8 @@ public class BasicDocument extends Document
 	 * @return The number of words in the document.
 	 */
 	@Override
-	public int getNumWords()
-	{
-		int cnt = 0;
-		for(String str : getTokens("[A-Za-z]+")) {
-			cnt++;
-		}
-	    return cnt;
-	}
-	
+	public int getNumWords(){return getTokens("[A-Za-z]+").size();}
+
 	/**
 	 * Get the number of sentences in the document.
 	 * Sentences are defined as contiguous strings of characters ending in an 
@@ -54,14 +49,21 @@ public class BasicDocument extends Document
 	 * @return The number of sentences in the document.
 	 */
 	@Override
-	public int getNumSentences()
-	{
+	public int getNumSentences() {
 		int cnt = 0;
 		for(String str: getTokens("[.!?]+")){
-			System.err.println(str);
+			//System.err.println(str);
 			cnt++;
 		}
-        return (cnt==0 && !getText().isEmpty()) ? cnt+1 : cnt;
+        return ((getText().length() != 0 && !regexMatches(getText().trim(),"[.!?]+$")) ? cnt+1 : cnt);
+	}
+
+	private boolean regexMatches(String text, String regex){
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(text);
+		if (m.find()) return true;
+		else return false;
+
 	}
 	
 	/**
@@ -79,12 +81,12 @@ public class BasicDocument extends Document
 	 * @return The number of syllables in the document.
 	 */
 	@Override
-	public int getNumSyllables()
-	{
+	public int getNumSyllables(){
 	    int syllables = 0;
+
 		for (String str: getTokens("[A-Za-z]+")){
 			syllables += countSyllables(str);
-			System.err.println(str + " " + syllables);
+			//System.out.println(str + " " + countSyllables(str));
 		}
         return syllables;
 	}
