@@ -12,27 +12,29 @@ import java.io.InputStreamReader;
 
 public class DocumentBenchmarking {
 
-	
+
 	public static void main(String [] args) {
 
 	    // Run each test more than once to get bigger numbers and less noise.
 	    // You can try playing around with this number.
-	    int trials = 100;
+	    int trials = 1000;
 
 	    // The text to test on
 	    String textfile = "data/warAndPeace.txt";
 		
 	    // The amount of characters to increment each step
 	    // You can play around with this
-		int increment = 20000;
+		int increment = 30000;
 
 		// The number of steps to run.  
 		// You can play around with this.
-		int numSteps = 20;
+		int numSteps = 200;
 		
 		// THe number of characters to start with. 
 		// You can play around with this.
 		int start = 50000;
+
+		final float TIME_OFFSET = 100000000.0F;
 		
 		// TODO: Fill in the rest of this method so that it runs two loops
 		// and prints out timing results as described in the assignment 
@@ -42,7 +44,25 @@ public class DocumentBenchmarking {
 		{
 			// numToCheck holds the number of characters that you should read from the 
 			// file to create both a BasicDocument and an EfficientDocument.  
-			
+
+			long startTime = 0, endTime = 0;
+
+			System.out.print(numToCheck + "\t");
+			String str =  getStringFromFile(textfile, numToCheck);
+
+			BasicDocument bs = new BasicDocument(str);
+			startTime = System.nanoTime();
+			bs.getFleschScore();
+			endTime = System.nanoTime();
+			System.out.printf("%.12f\t", (endTime - startTime) / TIME_OFFSET);
+
+			EfficientDocument effDoc = new EfficientDocument(str);
+			startTime = System.nanoTime();
+			effDoc.getFleschScore();
+			endTime = System.nanoTime();
+
+			System.out.printf("%.12f\n", (endTime - startTime) / TIME_OFFSET);
+
 			/* Each time through this loop you should:
 			 * 1. Print out numToCheck followed by a tab (\t) (NOT a newline)
 			 * 2. Read numToCheck characters from the file into a String

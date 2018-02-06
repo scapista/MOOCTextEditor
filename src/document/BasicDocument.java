@@ -63,7 +63,6 @@ public class BasicDocument extends Document
 		Matcher m = p.matcher(text);
 		if (m.find()) return true;
 		else return false;
-
 	}
 	
 	/**

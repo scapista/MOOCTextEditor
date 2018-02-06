@@ -82,8 +82,13 @@ public abstract class Document {
 			}
         }
         //if(word.endsWith("y")) syllables++;
-        if(word.endsWith("e") && !("aeiouAEIOU".indexOf(word.charAt(word.length() -2 )) > -1)) syllables--;
-	    return (syllables==0 && !word.isEmpty()) ? 1 : syllables;
+        try {
+			if (!word.isEmpty() && word.endsWith("e") && !("aeiouAEIOU".indexOf(word.charAt(word.length() - 2)) > -1))
+				syllables--;
+		} catch (Exception e){
+			return 1;
+		}
+			return (syllables==0 && !word.isEmpty()) ? 1 : syllables;
 	}
 	
 	/** A method for testing
@@ -145,6 +150,7 @@ public abstract class Document {
 	
 	/** return the Flesch readability score of this document */
 	public double getFleschScore() {
+
 		final float FLESCHMAX = 206.835F;
 		final float WORDS_PER_SENTENCE = 1.015F;
 		final float SYLLABLES_PER_WORD = 84.6F;
