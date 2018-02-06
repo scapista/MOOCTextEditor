@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.sun.tools.doclint.Entity.ge;
-
 /** 
  * A class that represents a text document
  * It does one pass through the document to count the number of syllables, words, 
