@@ -12,47 +12,52 @@ import java.util.AbstractList;
 public class MyLinkedList<E> extends AbstractList<E> {
 	LLNode<E> head;
 	LLNode<E> tail;
-	int size;
+	LLNode<E> dataElement;
+	private int size;
 
 	/** Create a new empty LinkedList */
 	public MyLinkedList() {
-		// TODO: Implement this method
+		size = 0;
+		head = new LLNode<>(null);
+		tail = new LLNode<>(null);
+		head.next = tail;
+		tail.prev = head;
 	}
 
 	/**
 	 * Appends an element to the end of the list
 	 * @param element The element to add
 	 */
-	public boolean add(E element ) 
-	{
-		// TODO: Implement this method
-		return false;
+	public void add(E element ) {
+		dataElement = new LLNode<>(element);
+		if(size == 0) {
+            dataElement.next = head;
+            dataElement.prev = tail;
+        }
+        size += 1;
 	}
 
 	/** Get the element at position index 
 	 * @throws IndexOutOfBoundsException if the index is out of bounds. */
-	public E get(int index) 
-	{
-		// TODO: Implement this method.
-		return null;
+	public E get(int index) {
+        dataElement = head.next;
+
+        return null;
 	}
 
 	/**
 	 * Add an element to the list at the specified index
-	 * @param The index where the element should be added
+	 * @param index The index where the element should be added
 	 * @param element The element to add
 	 */
-	public void add(int index, E element ) 
-	{
+	public void add(int index, E element ) {
 		// TODO: Implement this method
 	}
 
 
 	/** Return the size of the list */
-	public int size() 
-	{
-		// TODO: Implement this method
-		return -1;
+	public int size() {
+		return size;
 	}
 
 	/** Remove a node at the specified index and return its data element.

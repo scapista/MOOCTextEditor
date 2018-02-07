@@ -103,8 +103,13 @@ public class MyLinkedListGrader {
 	
 	public static void main(String args[])
 	{
-		MyLinkedListGrader grader = new MyLinkedListGrader();
-		grader.doTest();
+		//MyLinkedListGrader grader = new MyLinkedListGrader();
+		//grader.doTest();
+
+		MyLinkedList<Integer> testing = new MyLinkedList<>();
+		testing.add(1);
+		System.out.println(testing.size());
+
 	}
 	
 	
