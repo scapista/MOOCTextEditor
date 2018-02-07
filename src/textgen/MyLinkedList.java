@@ -12,7 +12,6 @@ import java.util.AbstractList;
 public class MyLinkedList<E> extends AbstractList<E> {
 	LLNode<E> head;
 	LLNode<E> tail;
-	LLNode<E> dataElement;
 	private int size;
 
 	/** Create a new empty LinkedList */
@@ -28,21 +27,24 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * Appends an element to the end of the list
 	 * @param element The element to add
 	 */
-	public void add(E element ) {
-		dataElement = new LLNode<>(element);
-		if(size == 0) {
-            dataElement.next = head;
-            dataElement.prev = tail;
-        }
+	public boolean add(E element ) {
+		LLNode dataNode = new LLNode<>(element);
+        dataNode.setIndexes(tail, head);
+        
         size += 1;
+        return true;
 	}
 
 	/** Get the element at position index 
 	 * @throws IndexOutOfBoundsException if the index is out of bounds. */
 	public E get(int index) {
-        dataElement = head.next;
-
-        return null;
+        if(index > size)
+            throw new IndexOutOfBoundsException("Data Index not in Linked List");
+        LLNode dataNode = head;
+        for(int i = 0; i < index; i++){
+            dataNode = dataNode.next;
+        }
+        return (E) dataNode.getData();
 	}
 
 	/**
@@ -92,8 +94,11 @@ class LLNode<E>
 	LLNode<E> next;
 	E data;
 
-	// TODO: Add any other methods you think are useful here
-	// E.g. you might want to add another constructor
+    public E getData(){return (E) data;}
+
+    public void setIndexes(LLNode<E> prev, LLNode<E> next){
+
+    }
 
 	public LLNode(E e) 
 	{

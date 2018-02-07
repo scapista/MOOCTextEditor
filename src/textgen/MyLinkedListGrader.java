@@ -107,8 +107,9 @@ public class MyLinkedListGrader {
 		//grader.doTest();
 
 		MyLinkedList<Integer> testing = new MyLinkedList<>();
-		testing.add(1);
+		testing.add(100);
 		System.out.println(testing.size());
+        System.out.println(testing.get(1));
 
 	}
 	
