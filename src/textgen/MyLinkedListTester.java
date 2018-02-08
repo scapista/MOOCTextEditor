@@ -3,6 +3,7 @@
  */
 package textgen;
 
+import static com.sun.tools.internal.ws.wsdl.parser.Util.fail;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
@@ -34,8 +35,7 @@ public class MyLinkedListTester {
 		shortList.add("B");
 		emptyList = new MyLinkedList<Integer>();
 		longerList = new MyLinkedList<Integer>();
-		for (int i = 0; i < LONG_LIST_LENGTH; i++)
-		{
+		for (int i = 0; i < LONG_LIST_LENGTH; i++) {
 			longerList.add(i);
 		}
 		list1 = new MyLinkedList<Integer>();
@@ -130,9 +130,8 @@ public class MyLinkedListTester {
 	
 	/** Test the size of the list */
 	@Test
-	public void testSize()
-	{
-		// TODO: implement this test
+	public void testSize() {
+
 	}
 
 	
@@ -142,18 +141,42 @@ public class MyLinkedListTester {
 	 * public void add(int index, E element)
 	 * */
 	@Test
-	public void testAddAtIndex()
-	{
-        // TODO: implement this test
-		
+	public void testAddAtIndex() {
+		/*shortList.add(1,"C");
+		shortList.add(1,"D");
+		shortList.add(100,"E");*/
+
+		emptyList.add(1,1);
+		emptyList.add(1,1000000000);
+		emptyList.add(1000,23121345);
+
+		longerList.add(1,1);
+		longerList.add(1,-1000000000);
+		longerList.add(1000,-23121345);
+
+		list1.add(1,1);
+		list1.add(1,1000000000);
+		list1.add(1000,23121345);
 	}
 	
 	/** Test setting an element in the list */
 	@Test
-	public void testSet()
-	{
-	    // TODO: implement this test
-	    
+	public void testSet() {
+		/*shortList.add("Hello");
+		shortList.add("G");
+		shortList.add("My Name is Scott");*/
+
+		emptyList.add(1);
+		emptyList.add(1000000000);
+		emptyList.add(23121345);
+
+		longerList.add(1);
+		longerList.add(-1000000000);
+		longerList.add(-23121345);
+
+		list1.add(1);
+		list1.add(1000000000);
+		list1.add(123121345);
 	}
 	
 	

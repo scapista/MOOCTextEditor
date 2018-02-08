@@ -103,14 +103,31 @@ public class MyLinkedListGrader {
 	
 	public static void main(String args[])
 	{
-		//MyLinkedListGrader grader = new MyLinkedListGrader();
-		//grader.doTest();
+		MyLinkedListGrader grader = new MyLinkedListGrader();
+		grader.doTest();
 
-		MyLinkedList<Integer> testing = new MyLinkedList<>();
+		/*MyLinkedList<Integer> testing = new MyLinkedList<>();
 		testing.add(100);
-		System.out.println(testing.size());
-        System.out.println(testing.get(1));
-
+        testing.add(101);
+        testing.add(102);
+        testing.add(103);
+        testing.add(104);
+        testing.add(105);
+		*//*System.out.println(testing.size());
+        System.out.println(testing.get(0));*//*
+        //testing.add(10,10);
+        //System.out.println(testing.size());
+        System.out.println(testing.get(4));
+        testing.add(4,5);
+        //System.out.println(testing.size());
+        System.out.println(testing.get(4));
+        testing.add(4,7);
+        //System.out.println(testing.size());
+        System.out.println(testing.get(4));
+        testing.remove(4);
+        System.out.println(testing.get(4));
+        System.out.println(testing.set(4,800));
+        System.out.println(testing.get(4));*/
 	}
 	
 	
