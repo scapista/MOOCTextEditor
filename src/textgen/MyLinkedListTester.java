@@ -3,7 +3,6 @@
  */
 package textgen;
 
-import static com.sun.tools.internal.ws.wsdl.parser.Util.fail;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
@@ -113,25 +112,51 @@ public class MyLinkedListTester {
 		assertEquals("Remove: check a is correct ", 65, a);
 		assertEquals("Remove: check element 0 is correct ", (Integer)21, list1.get(0));
 		assertEquals("Remove: check size is correct ", 2, list1.size());
-		
-		// TODO: Add more tests here
+
+        try {
+            longerList.get(-1);
+            fail("Check out of bounds");
+        }
+        catch (IndexOutOfBoundsException e) {
+
+        }
+        try {
+            longerList.get(LONG_LIST_LENGTH);
+            fail("Check out of bounds");
+        }
+        catch (IndexOutOfBoundsException e) {
+
+        }
+
 	}
 	
 	/** Test adding an element into the end of the list, specifically
 	 *  public boolean add(E element)
 	 * */
 	@Test
-	public void testAddEnd()
-	{
-        // TODO: implement this test
-		
+	public void testAddEnd(){
+
+        assertEquals("Initial size check is correct",0,emptyList.size());
+        emptyList.add(1);
+        assertEquals("Initial size check is correct",1,emptyList.size());
+        assertEquals("Initial get check is correct",Integer.valueOf(1),emptyList.get(0));
+        emptyList.add(1000000000);
+        assertEquals("Initial size check is correct",2,emptyList.size());
+        assertEquals("Initial get check is correct",Integer.valueOf(1000000000),emptyList.get(1));
+        emptyList.add(23121345);
+        assertEquals("Initial size check is correct",3,emptyList.size());
+        assertEquals("Initial get check is correct",Integer.valueOf(23121345),emptyList.get(2));
+
 	}
 
 	
 	/** Test the size of the list */
 	@Test
 	public void testSize() {
-
+        assertEquals("Initial size check is correct",2,shortList.size());
+        assertEquals("Initial size check is correct",0,emptyList.size());
+        assertEquals("Initial size check is correct",10,longerList.size());
+        assertEquals("Initial size check is correct",3,list1.size());
 	}
 
 	
@@ -142,44 +167,58 @@ public class MyLinkedListTester {
 	 * */
 	@Test
 	public void testAddAtIndex() {
-		/*shortList.add(1,"C");
+		shortList.add(1,"C");
 		shortList.add(1,"D");
-		shortList.add(100,"E");*/
+        assertEquals("Initial size check is correct",4,shortList.size());
 
-		emptyList.add(1,1);
-		emptyList.add(1,1000000000);
-		emptyList.add(1000,23121345);
 
-		longerList.add(1,1);
-		longerList.add(1,-1000000000);
-		longerList.add(1000,-23121345);
-
-		list1.add(1,1);
-		list1.add(1,1000000000);
-		list1.add(1000,23121345);
+        while( shortList.get(shortList.size() - 1 ) == null || !shortList.get(shortList.size() - 1 ).equals("C"))
+            shortList.remove(shortList.size() - 1 );
+        assertEquals("Initial size check is Incorrect",3,shortList.size());
 	}
 	
 	/** Test setting an element in the list */
 	@Test
 	public void testSet() {
-		/*shortList.add("Hello");
-		shortList.add("G");
-		shortList.add("My Name is Scott");*/
+        assertEquals("Initial size check is Incorrect",Integer.valueOf(0),longerList.get(0));
+		longerList.set(1,1);
+        assertEquals("Initial size check is Incorrect",Integer.valueOf(1),longerList.get(1));
+		longerList.set(2,-1000000000);
+        assertEquals("Initial size check is Incorrect",Integer.valueOf(-1000000000),longerList.get(2));
+        try {
+            longerList.set(-1,-23121345);
+            fail("Check out of bounds");
+        }
+        catch (IndexOutOfBoundsException e) {
 
-		emptyList.add(1);
-		emptyList.add(1000000000);
-		emptyList.add(23121345);
+        }
+        try {
+            longerList.set(longerList.size(),-23121345);
+            fail("Check out of bounds");
+        }
+        catch (IndexOutOfBoundsException e) {
 
-		longerList.add(1);
-		longerList.add(-1000000000);
-		longerList.add(-23121345);
+        }
 
-		list1.add(1);
-		list1.add(1000000000);
-		list1.add(123121345);
 	}
-	
-	
-	// TODO: Optionally add more test methods.
+   @Test
+    public void addThenRemove() {
+        assertEquals("Initial size check is Incorrect",0,emptyList.size());
+        emptyList.add(1);
+        assertEquals("Size check after Add is Incorrect 1",1,emptyList.size());
+        assertEquals("Value check is Incorrect 1",Integer.valueOf(1),emptyList.get(0));
+        emptyList.remove(0);
+        assertEquals("Size check after Remove is Incorrect",0,emptyList.size());
+        try {
+            emptyList.get(0);
+            fail("Check out of bounds");
+        }
+        catch (IndexOutOfBoundsException e) {
+
+        }
+        emptyList.add(5);
+        assertEquals("Size check after Add Remove is Incorrect 2",1,emptyList.size());
+        assertEquals("Initial size check is Incorrect 2",Integer.valueOf(5),emptyList.get(0));
+    }
 	
 }

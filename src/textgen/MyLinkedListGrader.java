@@ -104,7 +104,16 @@ public class MyLinkedListGrader {
 	public static void main(String args[])
 	{
 		MyLinkedListGrader grader = new MyLinkedListGrader();
-		grader.doTest();
+        grader.doTest();
+
+
+       /* MyLinkedList<String> shortList;
+        shortList = new MyLinkedList<String>();
+        shortList.add("A");
+        shortList.remove(0);
+        shortList.add("B");
+        System.out.println(shortList.size());
+        System.out.println(shortList.get(0));*/
 
 		/*MyLinkedList<Integer> testing = new MyLinkedList<>();
 		testing.add(100);
