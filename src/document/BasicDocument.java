@@ -50,19 +50,14 @@ public class BasicDocument extends Document
 	 */
 	@Override
 	public int getNumSentences() {
-		int cnt = 0;
-		for(String str: getTokens("[.!?]+")){
-			//System.err.println(str);
-			cnt++;
-		}
+		int cnt = getTokens("[.!?]+").size();
         return ((getText().length() != 0 && !regexMatches(getText().trim(),"[.!?]+$")) ? cnt+1 : cnt);
 	}
 
 	private boolean regexMatches(String text, String regex){
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(text);
-		if (m.find()) return true;
-		else return false;
+		return m.find();
 	}
 	
 	/**
