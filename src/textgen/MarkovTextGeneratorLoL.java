@@ -2,7 +2,6 @@ package textgen;
 
 import java.util.*;
 
-import static com.sun.org.apache.xml.internal.security.keys.keyresolver.KeyResolver.iterator;
 
 /** 
  * An implementation of the MTG interface that uses a list of lists.
@@ -28,24 +27,8 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	/** Train the generator by adding the sourceText */
 	@Override
 	public void train(String sourceText){
-		String[] lstSentences = sourceText.split("[.?!]+");
-		for (int j = 0; j < lstSentences.length; j++) {
-			String[] lstWords = lstSentences[j].trim().split("[^a-zA-Z0-9']+");
-			for (int i = 0; i < lstWords.length; i++) {
-				int index = searchListNode(lstWords[i]);
-				//System.out.println(index);
-				if (i + 1 == lstWords.length && index == 0) {
-					wordList.add(new ListNode(lstWords[i]));
-				} else {
-					if (index >= 0) {
-						wordList.get(index).addNextWord(lstWords[i + 1]);
-					} else {
-						ListNode tmpListNode = new ListNode(lstWords[i]);
-						tmpListNode.addNextWord(lstWords[i + 1]);
-						wordList.add(tmpListNode);
-					}
-				}
-			}
+		 if(wordList.size() == 0) {
+			retrain(sourceText);
 		}
 	}
 	
@@ -54,21 +37,30 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	 */
 	@Override
 	public String generateText(int numWords){
-		ListNode tmpNode = getRandomNode();
-		String generatedText = tmpNode.getWord();
-		for (int i = 0; i < numWords; i++){
-			String tmpWord = tmpNode.getRandomNextWord(rnGenerator);
-			System.out.println(tmpWord);
-			if(tmpWord == null){
-				tmpNode = getRandomNode();
-				generatedText += generatedText + ".";
+		if (numWords != 0 && wordList.size() != 0) {
+			ListNode tmpNode = getRandomNode();
+
+			String tmpWord = "";
+			String generatedText = tmpNode.getWord();
+
+			System.out.println(numWords);
+			for (int i = 0; i < numWords - 1; i++) {
+				int index = searchListNode(tmpWord);
+				if (index == -1) {
+					tmpWord = getRandomNode(wordList.size() - 1).getWord();
+					generatedText = generatedText + ". "
+							+ tmpWord.substring(0, 1).toUpperCase()
+							+ tmpWord.substring(1);
+				} else {
+					tmpNode = wordList.get(index);
+					tmpWord = tmpNode.getRandomNextWord(rnGenerator);
+					generatedText = generatedText
+							+ " " + tmpWord;
+				}
 			}
-			else
-				tmpNode = wordList.get(searchListNode(tmpWord));
-			generatedText += generatedText
-					+ " " + tmpNode.getWord();
+			return (generatedText.substring(generatedText.length() -1) == ".") ? generatedText : generatedText + ".";
 		}
-		return generatedText;
+		return "";
 	}
 	
 	
@@ -86,7 +78,23 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	@Override
 	public void retrain(String sourceText){
 		wordList.clear();
-		train(sourceText);
+		if (sourceText.length() != 0) {
+			String[] lstSentences = sourceText.split("[.?!]+");
+			for (int j = 0; j < lstSentences.length; j++) {
+				String[] lstWords = lstSentences[j].trim().split("[^a-zA-Z0-9']+");
+				for (int i = 0; i < lstWords.length - 1; i++) {
+					int index = searchListNode(lstWords[i]);
+					//System.out.println(index);
+					if (index >= 0) {
+						wordList.get(index).addNextWord(lstWords[i + 1]);
+					} else {
+						ListNode tmpListNode = new ListNode(lstWords[i]);
+						tmpListNode.addNextWord(lstWords[i + 1]);
+						wordList.add(tmpListNode);
+					}
+				}
+			}
+		}
 	}
 	
 	private int searchListNode (String word) {
@@ -98,15 +106,13 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 					return wordList.indexOf(tmpNode);
 		return -1;
 	}
-	private ListNode getRandomNode (){
-		System.out.println(Math.abs(rnGenerator.nextInt())
-				% wordList.size());
-		System.out.println(Math.abs(rnGenerator.nextInt())
-				% wordList.size());
-		return wordList.get(Math.abs(rnGenerator.nextInt())
+	private ListNode getRandomNode(){
+		return getRandomNode(1);
+	}
+	private ListNode getRandomNode (int i){
+		return wordList.get(Math.abs(rnGenerator.nextInt(i))
 				% wordList.size());
 	}
-
 
 	
 	/**
@@ -119,6 +125,8 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		MarkovTextGeneratorLoL gen = new MarkovTextGeneratorLoL(new Random(42));
 		String textString = "Hello.  Hello there.  This is a test.  Hello there.  Hello Bob.  Test again.";
 		System.out.println(textString);
+		gen.train(textString);
+		System.out.println(gen);
 		gen.train(textString);
 		System.out.println(gen);
 		//System.out.println(gen.generateText(20));
@@ -146,7 +154,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 				"I don't know why you say goodbye, I say hello, hello, hello, "+
 				"I don't know why you say goodbye, I say hello, hello, hello, "+
 				"I don't know why you say goodbye, I say hello, hello, hello,";
-		//dSystem.out.println(textString2);
+		//System.out.println(textString2);
 		//gen.retrain(textString2);
 		//System.out.println(gen);
 		//System.out.println(gen.generateText(20));
@@ -180,7 +188,7 @@ class ListNode
 	}
 	
 	public String getRandomNextWord(Random generator){
-		return nextWords.get(generator.nextInt()%nextWords.size());
+		return nextWords.get(Math.abs(generator.nextInt())%nextWords.size());
 	}
 	@Override
 	public String toString() {
