@@ -14,8 +14,7 @@ class TrieNode {
 	private boolean isWord;
 	
 	/** Create a new TrieNode */
-	public TrieNode()
-	{
+	public TrieNode() {
 		children = new HashMap<Character, TrieNode>();
 		text = "";
 		isWord = false;
