@@ -4,6 +4,9 @@
 package spelling;
 
 //import java.util.ArrayList;
+import com.sun.xml.internal.bind.v2.TODO;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +29,9 @@ public class WPTree implements WordPath {
 	// You'll need to create your own NearbyWords object here.
 	public WPTree () {
 		this.root = null;
-		// TODO initialize a NearbyWords object
-		// Dictionary d = new DictionaryHashSet();
-		// DictionaryLoader.loadDictionary(d, "data/dict.txt");
-		// this.nw = new NearbyWords(d);
+		Dictionary d = new DictionaryHashSet();
+		DictionaryLoader.loadDictionary(d, "data/dict.txt");
+        this.nw = new NearbyWords(d);
 	}
 	
 	//This constructor will be used by the grader code
@@ -39,9 +41,18 @@ public class WPTree implements WordPath {
 	}
 	
 	// see method description in WordPath interface
-	public List<String> findPath(String word1, String word2) 
-	{
-	    // TODO: Implement this method.
+	public List<String> findPath(String word1, String word2) {
+        String tmpStr = "";
+        WPTreeNode tmpNode = root;
+        LinkedList<WPTreeNode> nodeQueue = new LinkedList<>();
+        while(!word1.toLowerCase().equals(tmpStr.toLowerCase())){
+            nw.distanceOne(word1,true).stream().sorted().forEach(tmpString -> {
+                if (tmpString.length() < word2.length() + 1 && tmpString.length() < word2.length() - 1 )
+                    nodeQueue.add(tmpNode.addChild(tmpString));
+            });
+            nodeQueue.remove(0);
+            tmpNode = nodeQueue.get(0);
+        }
 	    return new LinkedList<String>();
 	}
 	
